@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <property name="prefix" value="test"/>
+    <property name="schema" value="public"/>
+
+    <!-- schemaName="test"-->
+    <changeSet id="v1.0_schema_init-1" author="AKoksharov" context="schema">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="${prefix}_test_entity"/>
+            </not>
+        </preConditions>
+        <createTable tableName="${prefix}_test_entity"
+                     remarks="Тестовая таблица"
+                     schemaName="${schema}">
+            <column name="id" type="BIGINT" autoIncrement="true" remarks="Идентификатор">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="test_table_pk"/>
+            </column>
+            <column name="description" type="VARCHAR(256)" remarks="Дополнительная информация"/>
+            <column name="created_at" type="TIMESTAMP(6) WITHOUT TIME ZONE" defaultValueComputed="CURRENT_TIMESTAMP" remarks="Дата создания"/>
+            <column name="updated_at" type="TIMESTAMP(6) WITHOUT TIME ZONE" remarks="Дата обновления"/>
+        </createTable>
+        <createIndex indexName="${prefix}_test_entity_descr_i"
+                     schemaName="${schema}"
+                     tableName="${prefix}_test_entity">
+            <column name="description"/>
+        </createIndex>
+        <comment>
+            Test 1
+        </comment>
+
+    </changeSet>
+
+    <changeSet id="v1.0_schema_init-2" author="AKoksharov" context="schema">
+        <preConditions>
+            <tableExists tableName="${prefix}_test_entity"/>
+        </preConditions>
+        <addColumn tableName="${prefix}_test_entity">
+            <column name="info" type="varchar(512)" remarks="Информационное поле">
+            </column>
+        </addColumn>
+        <comment>
+            Test 2
+        </comment>
+    </changeSet>
+
+
+    <changeSet id="v1.0_schema_init-3" author="AKoksharov" context="schema">
+        <createTable tableName="${prefix}_app_user"
+                     remarks="Testing user Table"
+                     schemaName="${schema}">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="app_user_pk"/>
+            </column>
+            <column name="login" type="VARCHAR(256)"/>
+        </createTable>
+        <comment>
+            Test 3
+        </comment>
+    </changeSet>
+
+</databaseChangeLog>
